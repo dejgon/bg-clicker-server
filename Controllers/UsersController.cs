@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClickerAPI.Models;
 using ClickerAPI.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClickerAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("My Policy")]
     public class UsersController : Controller
     {
         private readonly UserService _userService;
@@ -36,10 +38,41 @@ namespace ClickerAPI.Controllers
         [HttpPost]
         public ActionResult<User> Create([FromBody] User user)
         {
-            _userService.Create(user);
 
+            if(_userService.GetByUsername(user.Username) == null)
+            {
+                _userService.Create(user);
+            }
+            else
+            {
+                return StatusCode(409, "User exists in database!");
+            }
+           
             return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
         }
+
+        public class Login
+        {
+            public string username { get; set; }
+            public string password { get; set; }
+        }
+        [Route("/login")]
+        [HttpPost]
+        public ActionResult LoginReq([FromBody] Login login)
+        {
+            Console.WriteLine(login.username + login.password);
+            if (_userService.GetByUsername(login.username) == null)
+            {
+                return StatusCode(401, "User doesn't exists!");
+            }
+            User user = _userService.GetByUsername(login.username);
+            if(user.Password != login.password)
+            {
+                return StatusCode(401, "Wrong password or username");
+            }
+
+            return StatusCode(200, "Ok");
+        } 
 
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, User userIn)

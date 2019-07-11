@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClickerAPI.Models;
 using ClickerAPI.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClickerAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("My Policy")]
     public class UpgradesController : Controller
     {
         private readonly UpgradesService _upgradesService;
