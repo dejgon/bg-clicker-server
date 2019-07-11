@@ -35,6 +35,7 @@ namespace ClickerAPI
             services.AddSingleton<IClickerDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<ClickerDatabaseSettings>>().Value);
             services.AddSingleton<UserService>();
+            services.AddSingleton<UpgradesService>();
 
         }
 

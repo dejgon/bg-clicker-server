@@ -3,6 +3,7 @@
     public interface IClickerDatabaseSettings
     {
         string UsersCollectionName { get; set; }
+        string UpgradesCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
     }
