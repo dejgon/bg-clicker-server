@@ -56,14 +56,14 @@ namespace ClickerAPI.Controllers
             public string username { get; set; }
             public string password { get; set; }
         }
-        [Route("/login")]
+        [Route("/api/login")]
         [HttpPost]
         public ActionResult LoginReq([FromBody] Login login)
         {
             Console.WriteLine(login.username + login.password);
             if (_userService.GetByUsername(login.username) == null)
             {
-                return StatusCode(401, "User doesn't exists!");
+                return StatusCode(404, "User doesn't exists!");
             }
             User user = _userService.GetByUsername(login.username);
             if(user.Password != login.password)
