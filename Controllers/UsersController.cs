@@ -36,12 +36,8 @@ namespace ClickerAPI.Controllers
         }
 
         [HttpPost]
-<<<<<<< HEAD
         [EnableCors("My Policy")]
         public ActionResult<User> Create([FromBody] User user)
-=======
-        public ActionResult<User> Create([FromBody] UserBody user)
->>>>>>> 731fa34
         {
             User userToDatabase;
             if(_userService.GetByUsername(user.Username) == null)
