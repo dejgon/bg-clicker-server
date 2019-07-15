@@ -36,6 +36,7 @@ namespace ClickerAPI.Controllers
         }
 
         [HttpPost]
+        [EnableCors("My Policy")]
         public ActionResult<User> Create([FromBody] User user)
         {
 
@@ -58,6 +59,7 @@ namespace ClickerAPI.Controllers
         }
         [Route("/api/login")]
         [HttpPost]
+        [EnableCors("My Policy")]
         public ActionResult LoginReq([FromBody] Login login)
         {
             Console.WriteLine(login.username + login.password);
@@ -71,7 +73,7 @@ namespace ClickerAPI.Controllers
                 return StatusCode(401, "Wrong password or username");
             }
 
-            return StatusCode(200, "Ok");
+            return Ok(new { Message = "Ok", StatusCode = "200" });
         } 
 
         [HttpPut("{id:length(24)}")]
