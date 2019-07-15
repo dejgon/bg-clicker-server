@@ -36,20 +36,25 @@ namespace ClickerAPI.Controllers
         }
 
         [HttpPost]
+<<<<<<< HEAD
         [EnableCors("My Policy")]
         public ActionResult<User> Create([FromBody] User user)
+=======
+        public ActionResult<User> Create([FromBody] UserBody user)
+>>>>>>> 731fa34
         {
-
+            User userToDatabase;
             if(_userService.GetByUsername(user.Username) == null)
             {
-                _userService.Create(user);
+                userToDatabase = new User(user.Username, user.Password);
+                _userService.Create(userToDatabase);
             }
             else
             {
                 return StatusCode(409, "User exists in database!");
             }
            
-            return CreatedAtRoute("GetUser", new { id = user.Id.ToString() }, user);
+            return CreatedAtRoute("GetUser", new { id = userToDatabase.Id.ToString() }, user);
         }
 
         public class Login
