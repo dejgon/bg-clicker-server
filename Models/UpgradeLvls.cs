@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace ClickerAPI.Models
 {
-    public class UserBody
+    public class UpgradeLvls
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public int UpgradeId { get; set; }
+        public int UpgradeLvl { get; set; }
     }
 }

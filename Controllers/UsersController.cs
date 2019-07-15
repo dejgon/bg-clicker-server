@@ -14,9 +14,11 @@ namespace ClickerAPI.Controllers
     public class UsersController : Controller
     {
         private readonly UserService _userService;
-        public UsersController(UserService userService)
+        private readonly StatisticsService _statsService;
+        public UsersController(UserService userService, StatisticsService statsService)
         {
             _userService = userService;
+            _statsService = statsService;
         }
         [HttpGet]
         public ActionResult<List<User>> Get() =>
@@ -50,32 +52,31 @@ namespace ClickerAPI.Controllers
                 return StatusCode(409, "User exists in database!");
             }
            
-            return CreatedAtRoute("GetUser", new { id = userToDatabase.Id.ToString() }, user);
+            return CreatedAtRoute("GetUser", new { id = userToDatabase.Id.ToString() }, userToDatabase);
         }
 
-        public class Login
-        {
-            public string username { get; set; }
-            public string password { get; set; }
-        }
         [Route("/api/login")]
         [HttpPost]
         [EnableCors("My Policy")]
-        public ActionResult LoginReq([FromBody] Login login)
+        public ActionResult LoginReq([FromBody] User login)
         {
-            Console.WriteLine(login.username + login.password);
-            if (_userService.GetByUsername(login.username) == null)
+            Console.WriteLine(login.Username + login.Password);
+            if (_userService.GetByUsername(login.Username) == null)
             {
                 return StatusCode(404, "User doesn't exists!");
             }
-            User user = _userService.GetByUsername(login.username);
-            if(user.Password != login.password)
+            User user = _userService.GetByUsername(login.Username);
+            if(user.Password != login.Password)
             {
                 return StatusCode(401, "Wrong password or username");
             }
+            user.Password = null;
+            Statistics stats = _statsService.GetByUsername(user.Username);
+            return Ok(new { User = user, Stats = stats});
+        }
 
-            return Ok(new { Message = "Ok", StatusCode = "200" });
-        } 
+
+
 
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, User userIn)

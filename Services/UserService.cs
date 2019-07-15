@@ -32,8 +32,10 @@ namespace ClickerAPI.Services
             _users.InsertOne(user);
             return user;
         }
-        public void Update(string id, User userIn) =>
-            _users.ReplaceOne(user => user.Id == id, userIn);
+        public void Update(string username, User userIn)
+        {
+            _users.ReplaceOne(user => user.Username == username, userIn);
+        }   
 
         public void Remove(User userIn) =>
             _users.DeleteOne(user => user.Id == userIn.Id);
