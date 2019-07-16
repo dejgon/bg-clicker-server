@@ -42,8 +42,11 @@ namespace ClickerAPI.Controllers
         public ActionResult<User> Create([FromBody] User user)
         {
             User userToDatabase;
-            if(_userService.GetByUsername(user.Username) == null)
+            Statistics statistics;
+            if (_userService.GetByUsername(user.Username) == null)
             {
+                statistics = new Statistics(user.Username);
+                _statsService.Create(statistics);
                 userToDatabase = new User(user.Username, user.Password);
                 _userService.Create(userToDatabase);
             }

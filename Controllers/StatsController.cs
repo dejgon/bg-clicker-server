@@ -73,7 +73,7 @@ namespace ClickerAPI.Controllers
 
             _statsService.Update(id, statsIn);
 
-            return NoContent();
+            return Ok(new { Message ="przeszlo"});
         }
     }
 }
