@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace ClickerAPI
 {
@@ -103,6 +104,7 @@ namespace ClickerAPI
             app.UseCors("My Policy");
 
             app.UseHttpsRedirection();
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Users}/{action=Get()}");

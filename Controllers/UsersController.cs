@@ -15,14 +15,26 @@ namespace ClickerAPI.Controllers
     {
         private readonly UserService _userService;
         private readonly StatisticsService _statsService;
+
         public UsersController(UserService userService, StatisticsService statsService)
         {
             _userService = userService;
             _statsService = statsService;
         }
+
+        /// <summary>
+        /// Returns a list of all users existing in database
+        /// </summary>
+        /// <returns>List of all users</returns>
+        /// <response code="200">Returns list of all users</response>
+        /// <response code="500">If any error occurs</response>
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public ActionResult<List<User>> Get() =>
             _userService.Get();
+
+
 
         [HttpGet("{id:length(24)}", Name = "GetUser")]
         public ActionResult<User> Get(string id)
