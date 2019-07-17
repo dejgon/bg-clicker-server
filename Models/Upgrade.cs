@@ -16,15 +16,10 @@ namespace ClickerAPI.Models
 
         [BsonElement("Name")]
         public string Name { get; set; }
-        public List<Level> Levels { get; set; }
-
-
-    }
-    public class Level
-    {
         public int PointsPerClick { get; set; }
         public int PointsPerSecond { get; set; }
         public int Cost { get; set; }
 
     }
+    
 }

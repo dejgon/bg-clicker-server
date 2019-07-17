@@ -22,8 +22,12 @@ namespace ClickerAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Statistics>> Get() =>
-            _statsService.Get();
+        public ActionResult Get()
+        {
+            List<Statistics> stats = _statsService.Get();
+            return Ok(new { values = stats });
+        }
+            
 
         [Route("{id:length(24)}")]
         [HttpGet]
