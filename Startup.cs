@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClickerAPI
 {
@@ -29,6 +31,29 @@ namespace ClickerAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TodoContext>(opt =>
+        opt.UseInMemoryDatabase("TodoList"));
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Clicker API",
+                    Version = "v1",
+                    Description = "Simple Clicker app API using MongoDB as database",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Damian Cop",
+                        Email = string.Empty,
+                        Url = new Uri("https://github.com/dejgon"),
+                    },
+
+                }) ;
+            });
+
             services.AddCors(o => o.AddPolicy("My Policy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -66,6 +91,13 @@ namespace ClickerAPI
             }
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             // Enable Cors
             app.UseCors("My Policy");
