@@ -15,11 +15,13 @@ namespace ClickerAPI.Controllers
     {
         private readonly UserService _userService;
         private readonly StatisticsService _statsService;
+        private readonly UpgradesService _upgradesService;
 
-        public UsersController(UserService userService, StatisticsService statsService)
+        public UsersController(UserService userService, StatisticsService statsService, UpgradesService upgradesService)
         {
             _userService = userService;
             _statsService = statsService;
+            _upgradesService = upgradesService;
         }
 
         /// <summary>
@@ -57,7 +59,14 @@ namespace ClickerAPI.Controllers
             Statistics statistics;
             if (_userService.GetByUsername(user.Username) == null)
             {
+                UpgradeLvls upgrade;
+                var count = _upgradesService.Get().Count();
                 statistics = new Statistics(user.Username);
+                for (var i = 0; i < count; i++)
+                {
+                    upgrade = new UpgradeLvls(i, 0);
+                    statistics.UpgradeLvls.Add(upgrade);
+                }
                 _statsService.Create(statistics);
                 userToDatabase = new User(user.Username, user.Password);
                 _userService.Create(userToDatabase);

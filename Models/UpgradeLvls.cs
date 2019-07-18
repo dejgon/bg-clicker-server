@@ -9,5 +9,12 @@ namespace ClickerAPI.Models
     {
         public int UpgradeId { get; set; }
         public int UpgradeLvl { get; set; }
+
+        public UpgradeLvls(int upgradeId, int upgradeLvl)
+        {
+            UpgradeId = upgradeId;
+            UpgradeLvl = upgradeLvl;
+        }
     }
+
 }

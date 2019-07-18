@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using ClickerAPI.Services;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace ClickerAPI.Models
         public int ScoreFromClicks { get; set; }
         public int ScoreFromSecond { get; set; }
         public List<UpgradeLvls> UpgradeLvls { get; set; }
+
+   
 
         public Statistics(string username)
         {

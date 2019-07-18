@@ -29,6 +29,7 @@ namespace ClickerAPI.Services
 
         public User Create(User user)
         {
+
             _users.InsertOne(user);
             return user;
         }
