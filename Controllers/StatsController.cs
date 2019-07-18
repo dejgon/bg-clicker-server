@@ -36,6 +36,14 @@ namespace ClickerAPI.Controllers
             return _statsService.Get(id);
         }
 
+        [Route("{username}")]
+        [HttpGet]
+        public ActionResult<Statistics> GetByUsername(string username)
+        {
+            return _statsService.GetByUsername(username);
+        }
+
+
         public class Username
         {
             public string username { get; set; }
