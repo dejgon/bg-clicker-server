@@ -79,7 +79,7 @@ namespace ClickerAPI.Controllers
             return CreatedAtRoute("GetUser", new { id = userToDatabase.Id.ToString() }, userToDatabase);
         }
 
-        [Route("/api/login")]
+        [Route("login")]
         [HttpPost]
         [EnableCors("My Policy")]
         public ActionResult LoginReq([FromBody] User login)

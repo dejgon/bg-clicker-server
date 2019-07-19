@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ClickerAPI.Services;
 using ClickerAPI.Models;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClickerAPI.Controllers
 {
@@ -72,6 +73,7 @@ namespace ClickerAPI.Controllers
             return CreatedAtRoute("GetUser", new { id = stats.Id.ToString() }, stats);
         }
 
+        [Authorize]
         [Route("{id:length(24)}")]
         [HttpPut]
         public ActionResult Update(string id, [FromBody] Statistics statsIn)
