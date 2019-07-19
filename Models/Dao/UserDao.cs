@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClickerAPI.Models.Dao
 {
-    public class User
+    public class UserDao
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -15,6 +15,6 @@ namespace ClickerAPI.Models.Dao
         [BsonElement("Username")]
         public string Username { get; set; }
         public string Password { get; set; }
-        public Statistics Statistics { get; set; }
+        public StatisticsDao Statistics { get; set; }
     }
 }

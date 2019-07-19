@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ClickerAPI.Models.Dao
+namespace ClickerAPI.Models.Dto
 {
-    public class Statistics
+    public class StatisticsDto
     {
         public int Score { get; set; }
         public int Money { get; set; }
@@ -14,6 +14,6 @@ namespace ClickerAPI.Models.Dao
         public int Clicks { get; set; }
         public int ScoreFromClicks { get; set; }
         public int ScoreFromSecond { get; set; }
-        public List<UpgradeLvl> UpgradeLevels { get; set; }
+        public List<UpgradeLvlsDto> UpgradeLevels { get; set; }
     }
 }
