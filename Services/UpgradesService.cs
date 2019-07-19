@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using ClickerAPI.Models;
-using ClickerAPI.Models.Dao;
 
 namespace ClickerAPI.Services
 {
@@ -33,7 +32,7 @@ namespace ClickerAPI.Services
         public void Update(string id, Upgrade upgradeIn) =>
             _upgrades.ReplaceOne(upgrade => upgrade.Id == id, upgradeIn);
 
-        public void Remove(UserDao upgradeIn) =>
+        public void Remove(User upgradeIn) =>
             _upgrades.DeleteOne(upgrade => upgrade.Id == upgradeIn.Id);
 
         public void Remove(string id) =>

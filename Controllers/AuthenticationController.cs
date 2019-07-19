@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClickerAPI.Models;
 using ClickerAPI.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,13 +36,6 @@ namespace ClickerAPI.Controllers
             }
 
             return BadRequest("Invalid Request");
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, Route("check")]
-        public ActionResult testFunction()
-        {
-            return Ok(new { Message = "authenticated" });
         }
     }
 }
