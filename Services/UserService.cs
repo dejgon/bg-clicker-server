@@ -5,18 +5,21 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using ClickerAPI.Models;
 using ClickerAPI.Models.Dao;
+using ClickerAPI.Models.Dto;
 
 namespace ClickerAPI.Services
 {
     public class UserService
     {
         private readonly IMongoCollection<UserDao> _users;
-        public UserService(IClickerDatabaseSettings settings)
+        private readonly UpgradesService _upgradeService;
+        public UserService(IClickerDatabaseSettings settings, UpgradesService upgradesService)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _users = database.GetCollection<UserDao>(settings.UsersCollectionName);
+            _upgradeService = upgradesService;
         }
 
         public List<UserDao> Get() =>
@@ -25,13 +28,32 @@ namespace ClickerAPI.Services
         public UserDao Get(string id) =>
             _users.Find<UserDao>(user => user.Id == id).FirstOrDefault();
 
+        public bool CheckIfValid(string username, string password)
+        {
+            var user = _users.Find<UserDao>(userIn => userIn.Username == username).FirstOrDefault();
+            if (user == null || user.Username != username || user.Password != password)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public UserDao GetByUsername(string username) =>
             _users.Find<UserDao>(user => user.Username == username).FirstOrDefault();
 
-        public UserDao Create(UserDao user)
+        public bool Create(UserDto user)
         {
-            _users.InsertOne(user);
-            return user;
+            UserDao userToDb = new UserDao();
+            userToDb.Username = user.Username;
+            userToDb.Password = user.Password;
+            userToDb.Statistics = new StatisticsDao();
+            userToDb.Statistics.UpgradeLevels = new List<UpgradeLvlsDao>();
+            for(var i=0; i < _upgradeService.Length(); i++)
+            {
+                userToDb.Statistics.UpgradeLevels.Add(new UpgradeLvlsDao(i, 0));
+            }
+            _users.InsertOne(userToDb);
+            return true;
         }
         public void Update(string username, UserDao userIn)
         {

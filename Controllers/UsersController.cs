@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClickerAPI.Models;
 using ClickerAPI.Models.Dao;
 using ClickerAPI.Models.Dto;
 using ClickerAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,36 +19,41 @@ namespace ClickerAPI.Controllers
     {
         private readonly UserService _userService;
         private readonly UpgradesService _upgradesService;
+        private readonly IAuthenticateService _authService;
 
-        public UsersController(UserService userService, UpgradesService upgradesService)
+        public UsersController(UserService userService, UpgradesService upgradesService, IAuthenticateService authService)
         {
             _userService = userService;
             _upgradesService = upgradesService;
+            _authService = authService;
         }
 
-        /// <summary>
-        /// Returns a list of all users existing in database
-        /// </summary>
-        /// <returns>List of all users</returns>
-        /// <response code="200">Returns list of all users</response>
-        /// <response code="500">If any error occurs</response>
-        [HttpGet]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public ActionResult<List<UserDao>> Get() =>
-            _userService.Get();
-
-        [HttpGet, Route("stats")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public ActionResult<List<StatisticsDto>> GetStats()
+        [AllowAnonymous]
+        [HttpPost, Route("login")]
+        public IActionResult Login([FromBody] TokenRequest request)
         {
-            var users = _userService.Get();
-            List<StatisticsDao> stats = new List<StatisticsDao>();
-            foreach(var item in users){
-                stats.Add(item.Statistics);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
-            return Ok(stats);
+            string token;
+            if (_authService.IsAuthenticated(request, out token))
+            {
+                return Ok(token);
+            }
+            return BadRequest("Invalid Request");
+        }
+
+        [AllowAnonymous]
+        [HttpPost, Route("register")]
+        public IActionResult Register([FromBody] UserDto user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _userService.Create(user);
+            return Ok("Done");
         }
 
     }

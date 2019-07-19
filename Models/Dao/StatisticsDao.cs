@@ -15,5 +15,16 @@ namespace ClickerAPI.Models.Dao
         public int ScoreFromClicks { get; set; }
         public int ScoreFromSecond { get; set; }
         public List<UpgradeLvlsDao> UpgradeLevels { get; set; }
+
+        public StatisticsDao ()
+        {
+            Score = 0;
+            Money = 0;
+            PointsPerClick = 1;
+            PointsPerSecond = 0;
+            Clicks = 0;
+            ScoreFromClicks = 0;
+            ScoreFromSecond = 0;
+        }
     }
 }

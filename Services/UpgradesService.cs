@@ -30,6 +30,10 @@ namespace ClickerAPI.Services
             _upgrades.InsertOne(upgrade);
             return upgrade;
         }
+        public int Length()
+        {
+            return this.Get().Count();
+        }
         public void Update(string id, Upgrade upgradeIn) =>
             _upgrades.ReplaceOne(upgrade => upgrade.Id == id, upgradeIn);
 
