@@ -14,12 +14,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
-using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ClickerAPI
 {
@@ -47,19 +47,29 @@ namespace ClickerAPI
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                c.SwaggerDoc("v1", new Info
                 {
                     Title = "Clicker API",
                     Version = "v1",
                     Description = "Simple Clicker app API using MongoDB as database",
-                    Contact = new OpenApiContact
+                    Contact = new Contact
                     {
                         Name = "Damian Cop",
                         Email = string.Empty,
-                        Url = new Uri("https://github.com/dejgon"),
                     },
 
-                }) ;
+                });
+                c.AddSecurityDefinition("Bearer",
+                new ApiKeyScheme
+                {
+                    In = "header",
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                { "Bearer", Enumerable.Empty<string>() },
+            });
             });
 
             services.AddCors(o => o.AddPolicy("My Policy", builder =>

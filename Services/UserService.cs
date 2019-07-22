@@ -12,6 +12,7 @@ namespace ClickerAPI.Services
     public class UserService
     {
         private readonly IMongoCollection<UserDao> _users;
+
         private readonly UpgradesService _upgradeService;
         public UserService(IClickerDatabaseSettings settings, UpgradesService upgradesService)
         {
@@ -44,16 +45,24 @@ namespace ClickerAPI.Services
         public bool Create(UserDto user)
         {
             UserDao userToDb = new UserDao();
-            userToDb.Username = user.Username;
-            userToDb.Password = user.Password;
-            userToDb.Statistics = new StatisticsDao();
-            userToDb.Statistics.UpgradeLevels = new List<UpgradeLvlsDao>();
-            for(var i=0; i < _upgradeService.Length(); i++)
+            if (this.GetByUsername(user.Username) != null)
             {
-                userToDb.Statistics.UpgradeLevels.Add(new UpgradeLvlsDao(i, 0));
+                return false;
             }
-            _users.InsertOne(userToDb);
-            return true;
+            else
+            {
+                userToDb.Username = user.Username;
+                userToDb.Password = user.Password;
+                userToDb.Token = null;
+                userToDb.Statistics = new StatisticsDao();
+                userToDb.Statistics.UpgradeLevels = new List<UpgradeLvlsDao>();
+                for (var i = 0; i < _upgradeService.Length(); i++)
+                {
+                    userToDb.Statistics.UpgradeLevels.Add(new UpgradeLvlsDao(i, 0));
+                }
+                _users.InsertOne(userToDb);
+                return true;
+            }
         }
         public void Update(string username, UserDao userIn)
         {
@@ -65,5 +74,12 @@ namespace ClickerAPI.Services
 
         public void Remove(string id) =>
             _users.DeleteOne(user => user.Id == id);
+
+        public void AddTokenToUser(string username, string token)
+        {
+            UserDao userTo = this.GetByUsername(username);
+            userTo.Token = token;
+            _users.ReplaceOne(user => user.Username == username, userTo);
+        }
     }
 }

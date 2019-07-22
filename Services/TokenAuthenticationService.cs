@@ -21,6 +21,28 @@ namespace ClickerAPI.Services
             _userManagementService = service;
             _tokenManagement = tokenManagement.Value;
         }
+
+        public string CreateToken(string username)
+        {
+            var token = string.Empty;
+            var claim = new[]
+           {
+                new Claim(ClaimTypes.Name, username)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenManagement.Secret));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var jwtToken = new JwtSecurityToken(
+                _tokenManagement.Issuer,
+                _tokenManagement.Audience,
+                claim,
+                expires: DateTime.Now.AddMinutes(_tokenManagement.AccessExpiration),
+                signingCredentials: credentials
+            );
+            token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            return token;
+
+        }
         public bool IsAuthenticated(TokenRequest request, out string token)
         {
 

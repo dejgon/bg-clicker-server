@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ClickerAPI.Services
 {
-    public class UserManagementService: IUserManagementService
+    public class UserManagementService : IUserManagementService
     {
         private readonly UserService _userService;
 
@@ -18,7 +18,7 @@ namespace ClickerAPI.Services
         }
         public bool IsValidUser(string username, string password)
         {
-           return _userService.CheckIfValid(username, password);
+            return _userService.CheckIfValid(username, password);
         }
     }
 }

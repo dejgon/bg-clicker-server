@@ -9,5 +9,6 @@ namespace ClickerAPI.Services
     public interface IAuthenticateService
     {
         bool IsAuthenticated(TokenRequest request, out string token);
+        string CreateToken(string username);
     }
 }
