@@ -72,14 +72,27 @@ namespace ClickerAPI.Controllers
             {
                 return NotFound();
             }
-            var token = Request.Headers["Authorization"];
+            string token = Request.Headers["Authorization"];
             if (token != ("Bearer " + user.Token))
             {
-                return Unauthorized();
+                return Json(new {Token = token, Token2 = user.Token});
             }
             user.Password = null;
             StatisticsDao stats = user.getStats();
             return stats;
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("stats")]
+        public ActionResult<List<StatisticsDao>> GetStatistics()
+        {
+            List<UserDao> users = _userService.Get();
+            List<StatisticsDao> stats = new List<StatisticsDao>();
+            foreach(UserDao item in users)
+            {
+                stats.Add(item.getStats());
+            }
+            return Json(new { Stats = stats });
         }
 
     }
