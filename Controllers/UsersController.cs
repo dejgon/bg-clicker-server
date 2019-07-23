@@ -95,5 +95,23 @@ namespace ClickerAPI.Controllers
             return Json(new { Stats = stats });
         }
 
+        [Authorize]
+        [HttpPut, Route("update/{username}")]
+        public ActionResult UpdateStatistics(string username, [FromBody] StatisticsDao stats)
+        {
+            UserDao user = _userService.GetByUsername(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            string token = Request.Headers["Authorization"];
+            if (token != ("Bearer " + user.Token))
+            {
+                return Unauthorized();
+            }
+            user.Statistics = stats;
+            return NoContent();
+        }
+
     }
 }
