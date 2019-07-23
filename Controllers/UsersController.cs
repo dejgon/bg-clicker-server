@@ -112,7 +112,7 @@ namespace ClickerAPI.Controllers
             }
             user.Statistics = stats;
             _userService.Update(username, user);
-            return NoContent();
+            return Json(new { Message = "przeszlo" });
         }
 
     }

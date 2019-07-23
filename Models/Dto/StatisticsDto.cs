@@ -14,6 +14,7 @@ namespace ClickerAPI.Models.Dto
         public int Clicks { get; set; }
         public int ScoreFromClicks { get; set; }
         public int ScoreFromSecond { get; set; }
+        public int TimePlayed { get; set; }
         public List<UpgradeLvlsDto> UpgradeLevels { get; set; }
     }
 }

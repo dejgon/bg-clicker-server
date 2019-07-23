@@ -154,6 +154,7 @@ namespace ClickerAPI
             //app.UseCors("My Policy", );
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             
             app.UseMvc(routes =>

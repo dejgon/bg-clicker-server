@@ -14,6 +14,7 @@ namespace ClickerAPI.Models.Dao
         public int Clicks { get; set; }
         public int ScoreFromClicks { get; set; }
         public int ScoreFromSecond { get; set; }
+        public int TimePlayed { get; set; }
         public List<UpgradeLvlsDao> UpgradeLevels { get; set; }
 
         public StatisticsDao ()
@@ -25,6 +26,7 @@ namespace ClickerAPI.Models.Dao
             Clicks = 0;
             ScoreFromClicks = 0;
             ScoreFromSecond = 0;
+            TimePlayed = 0;
         }
     }
 }
