@@ -105,11 +105,13 @@ namespace ClickerAPI.Controllers
                 return NotFound();
             }
             string token = Request.Headers["Authorization"];
-            if (token != ("Bearer " + user.Token))
+            string tokenFromDb = "Bearer " + user.Token;
+            if (!string.Equals(token, tokenFromDb))
             {
                 return Unauthorized();
             }
             user.Statistics = stats;
+            _userService.Update(username, user);
             return NoContent();
         }
 
