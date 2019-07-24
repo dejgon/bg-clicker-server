@@ -92,8 +92,8 @@ namespace ClickerAPI.Controllers
             {
                 stats.Add(new ScoreDto(item.Username, item.Statistics.Score));
             }
-            stats.OrderBy(f => f.Score);
-            return Json(new { Stats = stats });
+            var ordered = stats.OrderByDescending(f => f.Score);
+            return Json(new { Stats = ordered });
         }
 
         [Authorize]
