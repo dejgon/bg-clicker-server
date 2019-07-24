@@ -84,14 +84,15 @@ namespace ClickerAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet, Route("stats")]
-        public ActionResult<List<StatisticsDao>> GetStatistics()
+        public ActionResult<List<ScoreDto>> GetStatistics()
         {
             List<UserDao> users = _userService.Get();
-            List<StatisticsDao> stats = new List<StatisticsDao>();
+            List<ScoreDto> stats = new List<ScoreDto>();
             foreach(UserDao item in users)
             {
-                stats.Add(item.getStats());
+                stats.Add(new ScoreDto(item.Username, item.Statistics.Score));
             }
+            stats.OrderBy(f => f.Score);
             return Json(new { Stats = stats });
         }
 
